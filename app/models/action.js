@@ -2,10 +2,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var actionSchema = new Schema({
-  type: String,
-  id_user: String,
-  created_at: Date,
-  updated_at: Date
+   type: String,
+   id_user: String,
+   created_at: Date,
+   updated_at: Date
 });
 
 
@@ -14,4 +14,4 @@ var actionSchema = new Schema({
 var Action = mongoose.model('Action', actionSchema);
 
 // make this available to our users in our Node applications
-module.exports = User;
+module.exports = Action;

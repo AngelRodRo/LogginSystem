@@ -21,6 +21,7 @@ module.exports = {
 
   // Return all Todos
   find: function(params, callback) {
+    console.log(params);
     callback(null, this.todos);
   },
 

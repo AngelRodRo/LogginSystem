@@ -1,4 +1,6 @@
+
 var User = require('../models/user');
+var userController = require('../controllers/users');
 
 module.exports = {
 
@@ -30,21 +32,6 @@ module.exports = {
     }
   },
 
-  // Create a new Todo
-  create: function(data, params, callback) {
-       var user = new User({
-          name: data.name,
-          username: data.username,
-          password: data.password
-       });
-
-      user.save(function(err) {
-         if (err) throw err;
-         callback(null, data);
-      });
-
-  },
-
-
+  create: userController.signUp,
 
 }
