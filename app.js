@@ -1,21 +1,40 @@
-var feathers = require('feathers');
-var app = feathers();
-var bodyParser = require('body-parser');
-var userService = require('./app/services/users');
-var productService = require('./app/services/product');
+var Todo = {
+    schema: {
+        title: {type: String, required: true},
+        description: {type: String},
+        dueDate: {type: Date, 'default': Date.now},
+        complete: {type: Boolean, 'default': false, index: true}
+    },
+    statics: {
+    },
+    virtuals: {
+    },
+    indexes: [
+        {'dueDate': -1, background: true}
+    ]
+};
 
-var mongoose = require('mongoose');
-//var db = require('../config/database');
+var feathers = require('feathers'),
+  bodyParser = require('body-parser'),
+  mongooseService = require('feathers-mongoose');
 
-mongoose.connect('mongodb://localhost:27017/test');
+var app = feathers()
+  // Setup the public folder.
+  .use(feathers.static(__dirname + '/public'))
+  // Enable Socket.io
+  .configure(feathers.socketio())
+  // Enable REST services
+  .configure(feathers.rest())
+  // Turn on JSON parser for REST services
+  .use(bodyParser.json())
+  // Turn on URL-encoded parser for REST services
+  .use(bodyParser.urlencoded({extended: true}))
 
-//app.set('views', path.join(__dirname, 'views'));
-//app.set('view engine', 'ejs');
+// Connect to the db, create and register a Feathers service.
+app.use('todos', new mongooseService('todo', Todo,{db:'test'}));
 
-
-
-app.configure(feathers.rest())
-   .use(bodyParser.json())
-  .use('/users',userService)
-  .use('/product',productService)
-  .listen(3000);
+// Start the server.
+var port = 8080;
+app.listen(port, function() {
+    console.log('Feathers server listening on port ' + port);
+});
